@@ -2,9 +2,25 @@
 import Vue from 'vue'
 import App from './App'
 import store from '@/store/'
+import { assetsImgPublicPath } from '@/utils/constants'
+import { get, post } from '@/utils/request'
 
 //  初始化全局状态
 Vue.prototype.$store = store
+
+//  初始化全局状态请求
+Vue.prototype.$get = get
+Vue.prototype.$post = post
+
+//  注册全局混合处理图片地址问题
+Vue.mixin({
+  methods: {
+    //  处理图片
+    serverImg (src) {
+      return `${assetsImgPublicPath}${src}`
+    }
+  }
+})
 
 Vue.config.productionTip = false
 App.mpType = 'app'
@@ -19,7 +35,7 @@ export default {
     pages: ['^pages/index/main'],
     window: {
       backgroundTextStyle: 'light',
-      navigationBarBackgroundColor: '#000000',
+      navigationBarBackgroundColor: '#0098DD',
       navigationBarTitleText: 'WeChat',
       navigationBarTextStyle: '#FFFFFF'
     }

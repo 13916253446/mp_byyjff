@@ -1,29 +1,78 @@
 <script>
 export default {
   created () {
-    // 调用API从本地缓存中获取数据
-    const logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    //  页面初始化的时候从缓存中获取用户信息
+    const user = wx.getStorageSync('byyj_user') || {}
+    this.$store.commit('User/saveUserInfo', user)
   }
 }
 </script>
 
-<style>
-.container {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-}
-/* this rule will be remove */
-* {
-  transition: width 2s;
-  -moz-transition: width 2s;
-  -webkit-transition: width 2s;
-  -o-transition: width 2s;
-}
+<style lang="stylus">
+view
+  font-size 32rpx
+*
+*
+  &::after
+  &::before
+    box-sizing border-box
+    line-height 1.4
+
+.center-flex
+  display flex
+  align-items center
+  justify-content center
+
+.center-flex-v
+  display flex
+  align-items center
+
+.center-flex-h
+  display flex
+  justify-content center
+
+.flex
+  display flex
+
+.flex-v
+  display flex
+  flex-direction column
+
+.flex-full
+  flex 1
+
+.active-btn
+  opacity .6
+
+.f-28
+  font-size 28rpx
+
+.f-30
+  font-size 30rpx
+
+.f-32
+  font-size 32rpx 
+
+.c-3
+  color #333
+
+.c-6
+  color #666
+
+.c-9
+  color #999
+
+.c-theme
+  color theme-color
+
+.loading-spin
+  width 30rpx
+  height 30rpx
+  border-radius 50%
+  border 2rpx solid #DDD
+  border-left-color theme-color
+
+.text-center
+  text-align center
 </style>
+

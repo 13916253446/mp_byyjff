@@ -1,105 +1,81 @@
 <template>
-  <div class="container" @click="clickHandle('test click', $event)">
+  <div>
+    <div class="banner-placeholder">
+      <img class="banner" :src="banner_img" alt="" srcset="">
+    </div>
+    <div class="userinfo-view center-flex-v">
+      <div class="flex-full f-32 c-6">
+        {{DistrictName && DistrictName !== '' ? DistrictName : '未知城市'}}
+      </div>
+      <div>
+        <div v-if="isLogin">
 
-    <div class="userinfo" @click="bindViewTap">
-      <img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />
-      <div class="userinfo-nickname">
-        <card :text="userInfo.nickName"></card>
+        </div>
+        <div v-else class="c-theme center-flex-v">
+          <div>当前未登录</div>
+          <div class="right-icon"></div>
+        </div>
       </div>
     </div>
-
-    <div class="usermotto">
-      <div class="user-motto">
-        <card :text="motto"></card>
-      </div>
-    </div>
-
-    <form class="form-container">
-      <input type="text" class="form-control" v-model="motto" placeholder="v-model" />
-      <input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />
-    </form>
-    <a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>
+    <drug-list></drug-list>
+    <!-- 促使加载数据，无实际意义 -->
+    <div v-if="DistrictNo"></div>
   </div>
 </template>
 
 <script>
-import card from '@/components/card'
-
+import { mapState } from 'vuex'
+import drugList from '@/components/drugList'
+//  上一次加载药具的行政区划代码
+let preDistrictNo = null
 export default {
+  name: 'Home',
+  components: {
+    drugList
+  },
   data () {
     return {
-      motto: 'Hello World',
-      userInfo: {}
+      banner_img: this.serverImg('banner@2x.png')
     }
   },
-
-  components: {
-    card
-  },
-
-  methods: {
-    bindViewTap () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
+  computed: mapState('User', {
+    //  行政区划代码
+    DistrictNo (state) {
+      let DistrictNo = state.UserInfo.DistrictNo || ''
+      if (preDistrictNo === DistrictNo) return
+      preDistrictNo = DistrictNo
+      //  拉取药具数据
+      this.$store.dispatch('Drugs/getDrugList', DistrictNo)
     },
-    getUserInfo () {
-      // 调用登录接口
-      wx.login({
-        success: () => {
-          wx.getUserInfo({
-            success: (res) => {
-              this.userInfo = res.userInfo
-            }
-          })
-        }
-      })
-    },
-    clickHandle (msg, ev) {
-      console.log('clickHandle:', msg, ev)
-    }
-  },
-
-  created () {
-    // 调用应用实例的方法获取全局数据
-    this.getUserInfo()
-  }
+    //  行政区划
+    DistrictName: state => state.UserInfo.DistrictName,
+    //  姓名
+    Name: state => state.UserInfo.Name,
+    //  是否登录
+    isLogin: state => state.UserInfo.UserCode && state.UserInfo.UserCode !== ''
+  })
 }
 </script>
 
 <style lang="stylus" scoped>
-.userinfo {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.userinfo-avatar {
-  width: 128rpx;
-  height: 128rpx;
-  margin: 20rpx;
-  border-radius: 50%;
-}
-
-.userinfo-nickname {
-  color: #aaa;
-}
-
-.usermotto {
-  margin-top: 150px;
-}
-
-.form-control {
-  display: block;
-  padding: 0 12px;
-  margin-bottom: 5px;
-  border: 1px solid #ccc;
-}
-
-.counter {
-  display: inline-block;
-  margin: 10px auto;
-  padding: 5px 10px;
-  color: blue;
-  border: 1px solid blue;
-}
+.banner
+.banner-placeholder
+  width 750rpx
+  height 375rpx
+.banner-placeholder
+  background-color placeholder-color
+.userinfo-view
+  height 110rpx
+  padding 0 30rpx
+  border-bottom 1rpx solid border-color
+.right-icon
+  width 18rpx
+  height 18rpx
+  border 1px solid theme-color
+  border-bottom none
+  border-left none 
+  transform rotate(45deg)
+  margin-left 20rpx
 </style>
+
+
