@@ -32,6 +32,9 @@ const actions = {
       let drugURL = status === 2 ? result : ''
       context.commit('setListStatus', status, drugURL)
       context.commit('setDrugList', dtData)
+    }, () => {
+      context.commit('setListStatus', 0, '')
+      context.commit('setDrugList', [])
     })
   }
 }

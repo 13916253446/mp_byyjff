@@ -6,6 +6,8 @@ app.$mount()
 
 export default {
   config: {
-    navigationBarTitleText: '查看启动日志'
+    window: {
+      backgroundColor: '#0098DD'
+    }
   }
 }

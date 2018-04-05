@@ -51,7 +51,10 @@ view
   font-size 30rpx
 
 .f-32
-  font-size 32rpx 
+  font-size 32rpx
+
+.f-36
+  font-size 36rpx 
 
 .c-3
   color #333
@@ -65,6 +68,9 @@ view
 .c-theme
   color theme-color
 
+.c-f
+  color #FFF
+
 .loading-spin
   width 30rpx
   height 30rpx
@@ -74,5 +80,18 @@ view
 
 .text-center
   text-align center
+
+.c-theme-bg
+  background-color theme-bg-color
+
+.input-placeholder
+  color #999
+  opacity .4
+
+.text-right
+  text-align right
+
+.text-left
+  text-align left
 </style>
 

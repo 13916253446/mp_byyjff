@@ -3,7 +3,7 @@
     <div class="banner-placeholder">
       <img class="banner" :src="banner_img" alt="" srcset="">
     </div>
-    <div class="userinfo-view center-flex-v">
+    <div class="userinfo-view center-flex-v" @click="viewUserInfo">
       <div class="flex-full f-32 c-6">
         {{DistrictName && DistrictName !== '' ? DistrictName : '未知城市'}}
       </div>
@@ -53,7 +53,18 @@ export default {
     Name: state => state.UserInfo.Name,
     //  是否登录
     isLogin: state => state.UserInfo.UserCode && state.UserInfo.UserCode !== ''
-  })
+  }),
+  methods: {
+    //  查看用户信息
+    viewUserInfo () {
+      //  已登录
+      if (this.isLogin) {
+      //  未登录
+      } else {
+        this.$router.push('/pages/login/main')
+      }
+    }
+  }
 }
 </script>
 

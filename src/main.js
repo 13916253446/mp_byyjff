@@ -4,6 +4,7 @@ import App from './App'
 import store from '@/store/'
 import { assetsImgPublicPath } from '@/utils/constants'
 import { get, post } from '@/utils/request'
+import router from '@/routes/'
 
 //  初始化全局状态
 Vue.prototype.$store = store
@@ -11,6 +12,9 @@ Vue.prototype.$store = store
 //  初始化全局状态请求
 Vue.prototype.$get = get
 Vue.prototype.$post = post
+
+//  初始化全局导航
+Vue.prototype.$router = router
 
 //  注册全局混合处理图片地址问题
 Vue.mixin({
@@ -36,7 +40,7 @@ export default {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#0098DD',
-      navigationBarTitleText: 'WeChat',
+      navigationBarTitleText: '避孕药具发放',
       navigationBarTextStyle: '#FFFFFF'
     }
   }
