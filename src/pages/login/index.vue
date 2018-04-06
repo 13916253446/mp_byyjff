@@ -1,9 +1,13 @@
 <template>
   <div class="wrapper c-theme-bg">
     <div class="contain">
-      <div class="input-item center-flex-v first-input-item">
+      <div class="input-item center-flex-v first-input-item usercode-input-item">
         <img class="input-icon" :src="telIcon" alt="" srcset="">
-        <input placeholder="请输入手机号" maxlength="11" placeholder-class='input-placeholder' class="flex-full" type="number" v-model.lazy="tel" >
+        <input @focus="telFoucus" @blur="telBlur" placeholder="请输入手机号" maxlength="11" placeholder-class='input-placeholder' class="flex-full" type="number" v-model="tel" >
+        <!-- 登录用户提示 -->
+        <div v-show="showInputTip">
+          <login-tip :current-user-code="tel" @chooseUser="chooseUser"></login-tip>
+        </div>
       </div>
       <div class="input-item center-flex-v">
         <img class="input-icon" :src="pwdIcon" alt="" srcset="">
@@ -28,8 +32,12 @@
 
 <script>
 import { isPhoneNum } from '@/utils/'
+import loginTip from '@/components/inputTip'
 export default {
   name: 'Login',
+  components: {
+    loginTip
+  },
   data () {
     return {
       tel: '',
@@ -37,7 +45,8 @@ export default {
       rememberMe: true,
       ajaxing: false,
       telIcon: this.serverImg('login/icon_phone@3x.png'),
-      pwdIcon: this.serverImg('login/icon_code@3x.png')
+      pwdIcon: this.serverImg('login/icon_code@3x.png'),
+      showInputTip: false
     }
   },
   methods: {
@@ -73,6 +82,18 @@ export default {
       this.ajaxing = true
       this.$get('/User/LoginIn', { json }, { showLoading: true, msg: '正在登录...' }).then(res => {
         this.ajaxing = false
+        let { isSuccess, dtData = [] } = res
+        let user = dtData.length > 0 ? dtData[0] : {}
+        if (isSuccess) {
+          //  提交用户信息
+          this.$store.commit('User/saveUserInfo', user)
+          //  提交要记住的用户信息
+          if (this.rememberMe) {
+            this.$store.commit('User/saveRememberUserInfo', { ...json, Name: user.Name || '' })
+          }
+          // 返回首页
+          this.$router.backHome()
+        }
       }, () => {
         this.ajaxing = false
       })
@@ -80,6 +101,21 @@ export default {
     //  记住我
     rememberMeHandler () {
       this.rememberMe = !this.rememberMe
+    },
+    //  用户名获取焦点时
+    telFoucus () {
+      this.showInputTip = true
+    },
+    //  用户名失去焦点时
+    telBlur () {
+      console.log('blur')
+      this.showInputTip = false
+    },
+    //  选择用户
+    chooseUser (user) {
+      if (user == null || user === '') return
+      this.tel = user.UserCode
+      this.pwd = user.PassWord
     }
   }
 }
@@ -137,4 +173,7 @@ export default {
 
 .remember-me
   margin-left 14rpx
+
+.usercode-input-item
+  position relative
 </style>

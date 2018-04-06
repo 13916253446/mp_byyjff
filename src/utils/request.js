@@ -3,7 +3,7 @@ import { apiAddress } from './constants'
 import errorIcon from '../../static/error.png'
 
 //  get请求
-export function get (namespace = '', data = { }, { showError = true, showLoading = false, msg: title = '加载中...' } = {}) {
+export function get (namespace = '', data = { }, { showError = true, showLoading = false, msg: title = '加载中...', shutLoading = false } = {}) {
   return new Promise((resolve, reject) => {
     let loaded = false
     let url = `${apiAddress}${namespace}`
@@ -12,7 +12,7 @@ export function get (namespace = '', data = { }, { showError = true, showLoading
       wx.showLoading({
         title
       })
-    } else {
+    } else if (!shutLoading) {
       //  接口时间控制在500ms之内不显示loading
       let timer = setTimeout(() => {
         if (!loaded) {

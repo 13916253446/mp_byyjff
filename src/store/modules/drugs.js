@@ -26,7 +26,7 @@ const mutations = {
 const actions = {
   getDrugList (context, DistrictNo = '') {
     //  获取药具列表
-    return get('/Drug/GetDrugByArea', {json: JSON.stringify({ DistrictNo })}).then(res => {
+    return get('/Drug/GetDrugByArea', {json: JSON.stringify({ DistrictNo })}, { shutLoading: true }).then(res => {
       let { isSuccess, msg, dtData = [], result } = res
       let status = (isSuccess ? '0' : msg) >>> 0
       let drugURL = status === 2 ? result : ''

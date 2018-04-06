@@ -4,6 +4,10 @@ export default {
     //  页面初始化的时候从缓存中获取用户信息
     const user = wx.getStorageSync('byyj_user') || {}
     this.$store.commit('User/saveUserInfo', user)
+
+    //  获取记住的用户信息
+    const rememberUser = wx.getStorageSync('byyj_remember_user') || []
+    this.$store.commit('User/initRememberUserInfo', rememberUser)
   }
 }
 </script>

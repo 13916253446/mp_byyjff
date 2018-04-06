@@ -1,6 +1,10 @@
 import errorIcon from '../../static/error.png'
 
 const routes = {
+  //  药具列表
+  '/pages/index/main': {
+    title: '避孕药具发放'
+  },
   //  登录
   '/pages/login/main': {
     title: '登录'
@@ -34,6 +38,27 @@ export function push (url = '') {
   })
 }
 
+//  关闭当前页面跳转
+export function replace (url = '') {
+  const currentRoute = routes[url]
+  wx.redirectTo({
+    url,
+    fail,
+    success () {
+      success(currentRoute && currentRoute.title)
+    }
+  })
+}
+
+// 返回首页
+export function backHome () {
+  wx.navigateBack({
+    delta: 10000
+  })
+}
+
 export default {
-  push
+  push,
+  replace,
+  backHome
 }

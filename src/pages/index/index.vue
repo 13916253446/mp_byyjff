@@ -8,10 +8,13 @@
         {{DistrictName && DistrictName !== '' ? DistrictName : '未知城市'}}
       </div>
       <div>
-        <div v-if="isLogin">
-
+        <div v-if="isLogin" class="center-flex-v c-6">
+          <img class="user-icon" :src="login_user_img" alt="" srcset="">
+          <div>{{Name || '未设置'}}</div>
+          <div class="right-icon"></div>
         </div>
         <div v-else class="c-theme center-flex-v">
+          <img class="user-icon" :src="unlogin_user_img" alt="" srcset="">
           <div>当前未登录</div>
           <div class="right-icon"></div>
         </div>
@@ -35,7 +38,9 @@ export default {
   },
   data () {
     return {
-      banner_img: this.serverImg('banner@2x.png')
+      banner_img: this.serverImg('banner@2x.png'),
+      login_user_img: this.serverImg('index/icon_man_login@3x.png'),
+      unlogin_user_img: this.serverImg('index/icon_man@3x.png')
     }
   },
   computed: mapState('User', {
@@ -82,11 +87,15 @@ export default {
 .right-icon
   width 18rpx
   height 18rpx
-  border 1px solid theme-color
+  border 1px solid currentColor
   border-bottom none
   border-left none 
   transform rotate(45deg)
   margin-left 20rpx
+.user-icon
+  width 32rpx
+  height 32rpx
+  margin-right 12rpx
 </style>
 
 
