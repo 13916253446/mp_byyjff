@@ -64,6 +64,7 @@ export default {
     viewUserInfo () {
       //  已登录
       if (this.isLogin) {
+        this.$router.push('/pages/userInfo/main')
       //  未登录
       } else {
         this.$router.push('/pages/login/main')

@@ -8,6 +8,10 @@ const routes = {
   //  登录
   '/pages/login/main': {
     title: '登录'
+  },
+  //  账号信息和申领记录
+  '/pages/userInfoAndClaimRecords/main': {
+    title: '我的'
   }
 }
 

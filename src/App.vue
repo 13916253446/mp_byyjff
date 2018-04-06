@@ -97,5 +97,8 @@ view
 
 .text-left
   text-align left
+
+.relative-view
+  position relative
 </style>
 
