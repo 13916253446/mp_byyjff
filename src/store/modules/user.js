@@ -13,7 +13,6 @@ const mutations = {
     //  用户信息必须是对象
     if (Object.prototype.toString.call(val) !== '[object Object]') return
     state.UserInfo = val
-
     //  缓存用户信息
     wx.setStorageSync('byyj_user', val)
   },

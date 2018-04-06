@@ -128,6 +128,10 @@ export default {
       this.scrollbarScroll(tab)
       this.tabContentChange(tab)
       this.currentTab = tab
+      let title = tab === 1 ? '账号信息' : '申领记录'
+      wx.setNavigationBarTitle({
+        title
+      })
     }
   }
 }
@@ -136,6 +140,7 @@ export default {
 <style lang="stylus" scoped>
 .tab-wrapper
   background-color #FFF
+  border-bottom 1rpx solid border-color
 
 .tab-item
   height 88rpx
@@ -143,7 +148,7 @@ export default {
 
 .content-wrapper
   position absolute
-  top 88rpx
+  top 89rpx
   bottom 0
   left 0
   right 0
