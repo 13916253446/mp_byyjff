@@ -45,6 +45,12 @@ view
 .flex-full
   flex 1
 
+.flex-shrink
+  flex-shrink 0
+
+.flex-wrap
+  flex-wrap wrap
+
 .active-btn
   opacity .6
 
@@ -97,6 +103,11 @@ view
 
 .text-left
   text-align left
+
+.text-ellipsis
+  overflow hidden
+  white-space nowrap
+  text-overflow ellipsis
 
 .relative-view
   position relative

@@ -1,6 +1,7 @@
 
 import { apiAddress } from './constants'
 import errorIcon from '../../static/error.png'
+import store from '@/store/'
 
 //  get请求
 export function get (namespace = '', data = { }, { showError = true, showLoading = false, msg: title = '加载中...', shutLoading = false } = {}) {
@@ -27,6 +28,9 @@ export function get (namespace = '', data = { }, { showError = true, showLoading
       url,
       data,
       method,
+      header: {
+        Authorization: `ticket ${store.state.User.UserInfo.AutherTicket || ''}`
+      },
       complete (res) {
         loaded = true
         wx.hideLoading()
