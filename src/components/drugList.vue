@@ -14,6 +14,9 @@
             </div>
             <div class="text-ellipsis c-6 f-30 second-class-bc">{{item.SecondClass}}</div>
             <div class="f-26 c-9 text-ellipsis introduce-bc">{{item.Introduce}}</div>
+            <div class="text-right">
+              <div @click="receiveDrugs(item)" class="receive-btn f-28 c-9 center-flex" :class="{'c-theme': item.LeftCount && item.LeftCount > 0 }">{{item.LeftCount && item.LeftCount > 0 ? '领取' : '缺货'}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -30,6 +33,8 @@
     <div v-else class="text-center">
       <div class="loading-spin" :animation="animationData"></div>
     </div>
+    <!-- 促使加载数据，无实际意义 -->
+    <div v-if="DistrictNoIdentityCardNo"></div>
   </div>
 </template>
 
@@ -46,12 +51,41 @@ export default {
       emptyIcon: this.serverImg('empty_state@2x.png')
     }
   },
-  computed: mapState('Drugs', [
-    'listStatus',
-    'drugURL',
-    'drugList',
-    'drugListAjaxLoaded'
-  ]),
+  computed: {
+    ...mapState('Drugs', [
+      'listStatus',
+      'drugURL',
+      'drugList',
+      'drugListAjaxLoaded'
+    ]),
+    ...mapState('User', {
+      //  是否登录
+      isLogin: state => state.UserInfo.UserCode && state.UserInfo.UserCode !== '',
+      Name: state => state.UserInfo.Name || '',
+      IdentityCardNo: state => state.UserInfo.IdentityCardNo || '',
+      DistrictNo: state => state.UserInfo.DistrictNo || '',
+      //  是否可领取
+      UserCanReceive: state => !!state.UserApply.isSuccess,
+      //  不能领取原因
+      CannotReceiveMsg: state => state.UserApply.msg || ''
+    }),
+    //  获取可领取药具数据
+    DistrictNoIdentityCardNo: (() => {
+      //  上次加载数据的参数值
+      let preDistrictNo = null
+      let preIdentityCardNo = null
+      return function () {
+        let DistrictNo = this.$store.state.User.UserInfo.DistrictNo || ''
+        let IdentityCardNo = this.$store.state.User.UserInfo.IdentityCardNo || ''
+        let drugList = this.$store.state.Drugs.drugList || []
+        //  没有药具数据或者没有身份证或者和上次加载数据的参数相同就不再加载
+        if (IdentityCardNo === '' || drugList.length < 1 || (DistrictNo === preDistrictNo && IdentityCardNo === preIdentityCardNo)) return
+        preDistrictNo = DistrictNo
+        preIdentityCardNo = IdentityCardNo
+        this.$store.dispatch('User/getUserApply', { IdentityCardNo, DistrictNo })
+      }
+    })()
+  },
   created () {
     this.animationData = createInfiniteLoading()
   },
@@ -62,6 +96,52 @@ export default {
       wx.navigateTo({
         url
       })
+    },
+    //  点击领取药具
+    receiveDrugs (item) {
+      //  判断有没有登录
+      if (!this.isLogin) {
+        wx.showModal({
+          title: '温馨提示',
+          content: '您还没有登录，请先登录哦！',
+          confirmText: '去登录',
+          confirmColor: '#0098DD',
+          success: (res) => {
+            //  点击去登录
+            if (res.confirm) {
+              this.$router.push('/pages/login/main')
+            }
+          }
+        })
+        return
+      }
+      //  判断信息是否完整
+      if (this.Name === '' || this.IdentityCardNo === '' || this.DistrictNo === '') {
+        wx.showModal({
+          title: '温馨提示',
+          content: '先完善个人资料后再领取药具！',
+          confirmText: '去录入',
+          confirmColor: '#0098DD',
+          success: (res) => {
+            //  点击去录入个人信息
+            if (res.confirm) {
+              this.$router.push(`/pages/userInfo/main?tab=1`)
+            }
+          }
+        })
+        return
+      }
+      //  判断是否还可以领取
+      if (!this.UserCanReceive) {
+        wx.showModal({
+          title: '温馨提示',
+          content: this.CannotReceiveMsg,
+          confirmText: '知道了',
+          confirmColor: '#0098DD',
+          showCancel: false
+        })
+        return
+      }
     }
   }
 }
@@ -106,6 +186,15 @@ export default {
   margin-top 6rpx
 
 .introduce-bc
+  margin-top 16rpx
+
+.receive-btn
+  border 1rpx solid currentColor
+  width 120rpx
+  height 56rpx
+  background-color #FFF
+  display inline-flex
+  border-radius 999rpx
   margin-top 16rpx
 </style>
 

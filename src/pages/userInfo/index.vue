@@ -45,7 +45,7 @@ export default {
   },
   mounted () {
     //  初始化tab
-    let initTab = this.$root.$mp.query.tab || 1
+    let initTab = (this.$root.$mp.query.tab || 1) >>> 0
     this.changeTab(initTab)
   },
   methods: {

@@ -10,7 +10,7 @@ const routes = {
     title: '登录'
   },
   //  账号信息和申领记录
-  '/pages/userInfoAndClaimRecords/main': {
+  '/pages/userInfo/main': {
     title: '我的'
   }
 }

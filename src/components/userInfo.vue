@@ -65,7 +65,7 @@ export default {
 .item
   height 110rpx
   background-color #FFF
-  border-bottom 1px solid border-color
+  border-bottom 1rpx solid border-color
   padding 0 30rpx
 
 .key-item
@@ -75,7 +75,7 @@ export default {
   width 30rpx
   height 30rpx
   border-top 1rpx solid currentColor
-  border-right 1px solid  currentColor
+  border-right 1rpx solid  currentColor
   transform rotate(45deg)
 
 .bottom-wrapper
@@ -86,7 +86,7 @@ export default {
 
 .ext-btn
   height 88rpx
-  border 1px solid theme-color
+  border 1rpx solid theme-color
   border-radius 8rpx
 
 .user-agreement

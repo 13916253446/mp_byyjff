@@ -1,10 +1,15 @@
+import { get } from '@/utils/request'
 const state = {
   //  用户信息
   UserInfo: {
 
   },
   //  登录记住的用户信息
-  rememberUserInfo: []
+  rememberUserInfo: [],
+  //  用户可领取药具的信息
+  UserApply: {
+
+  }
 }
 
 const mutations = {
@@ -36,11 +41,41 @@ const mutations = {
 
     //  缓存记住的用户信息
     wx.setStorageSync('byyj_remember_user', state.rememberUserInfo)
+  },
+  //  保存用户可领取药具数据
+  saveUserApply (state, val) {
+    state.UserApply = val
+  }
+}
+
+const actions = {
+  //  获取用户可领取数据
+  getUserApply (context, { IdentityCardNo = '', DistrictNo = '' } = {}) {
+    console.log(arguments)
+    let json = JSON.stringify({
+      IdentityCardNo,
+      DistrictNo
+    })
+    return get('/Orders/IsApply', { json }, { shutLoading: true, showError: false }).then(res => {
+      let { isSuccess = false, msg = '', result = '0|0' } = res
+      context.commit('saveUserApply', {
+        isSuccess,
+        msg,
+        result
+      })
+    }, error => {
+      context.commit('saveUserApply', {
+        isSuccess: false,
+        msg: error,
+        result: '0|0'
+      })
+    })
   }
 }
 
 export default {
   namespaced: true,
   state,
-  mutations
+  mutations,
+  actions
 }
